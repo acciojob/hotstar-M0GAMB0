@@ -25,6 +25,7 @@ public class UserService {
     public Integer addUser(User user){
 
         //Jut simply add the user to the Db and return the userId returned by the repository
+        userRepository.save(user);
         return null;
     }
 
@@ -32,9 +33,17 @@ public class UserService {
 
         //Return the count of all webSeries that a user can watch based on his ageLimit and subscriptionType
         //Hint: Take out all the Webseries from the WebRepository
-
-
-        return null;
+        int count=0;
+        User user=userRepository.findById(userId).get();
+        int userAge=user.getAge();
+        SubscriptionType st=user.getSubscription().getSubscriptionType();
+        List<WebSeries> webSeriesList=webSeriesRepository.findAll();
+        for(WebSeries ws:webSeriesList) {
+            if (ws.getAgeLimit() == userAge && ws.getSubscriptionType() == st) {
+                count++;
+            }
+        }
+        return count;
     }
 
 
